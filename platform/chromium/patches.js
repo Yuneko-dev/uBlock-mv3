@@ -1,4 +1,3 @@
-class HTMLDivElement {}
 class HTMLDocument {
 	currentScript = {
 		src: chrome.runtime.getURL("/js/background.sw.js"),
@@ -6,23 +5,12 @@ class HTMLDocument {
 	title = "uBlock Origin Background Page";
 
 	createElement(type) {
-		if (type === "div")
-			return new HTMLDivElement();
-		throw "a";
-	}
-}
-class CSS {
-	static supports(selector) {
-		console.log("supports", selector);
-		return true;
+		throw new TypeError("HTMLDocument.createElement is not implemented");
 	}
 }
 
-globalThis.HTMLDivElement = HTMLDivElement;
 globalThis.HTMLDocument = HTMLDocument;
-globalThis.XMLDocument = class { };
 globalThis.Element = class { };
-globalThis.CSS = CSS;
 globalThis.document = new HTMLDocument();
 globalThis.window = globalThis;
 

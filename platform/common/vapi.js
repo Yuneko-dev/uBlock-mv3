@@ -25,7 +25,24 @@
 
 if (
     self.browser instanceof Object &&
-    self.browser instanceof Element === false
+    // [PATCH uBlock-mv3] @SukkaW
+    //
+    // uBO add this check to circumvent a specific issue:
+    // contentscript is injected directly into the DOM, but what if
+    // there is a <div id="broswer" /> that can also register self.browser?
+    //
+    // See https://github.com/uBlockOrigin/uBlock-issues/issues/1914
+    //
+    // However, we don't have this issue in the very first place, as we are in
+    // a Service Worker and there is no DOM pollution.
+    //
+    // self.browser instanceof Element === false
+    typeof self.browser === "object" &&
+    (
+        typeof Element === "function"
+            ? (self.browser instanceof Element === false)
+            : (true)
+    )
 ) {
     self.chrome = self.browser;
 } else {
@@ -49,15 +66,25 @@ var vAPI = self.vAPI; // jshint ignore:line
 //   Skip text/plain documents.
 
 if (
+    // [PATCH uBlock-mv3 START] @SukkaW
+    //
+    // uBO include this check to skip itself on Chrome's JSON/XML/Text code view.
+    //
+    // For us, Service Worker do not have DOM, so we short circuit Service Worker here
     (
-        document instanceof HTMLDocument ||
-        document instanceof XMLDocument &&
-        document.createElement('div') instanceof HTMLDivElement
-    ) &&
-    (
-        /^image\/|^text\/plain/.test(document.contentType || '') === false
-    ) &&
-    (
+        (
+            typeof ServiceWorkerGlobalScope !== "undefined"
+        ) || (
+            (
+                document instanceof HTMLDocument ||
+                document instanceof XMLDocument &&
+                document.createElement('div') instanceof HTMLDivElement
+            ) &&
+            (
+                /^image\/|^text\/plain/.test(document.contentType || '') === false
+            )
+        )
+    ) && (
         self.vAPI instanceof Object === false || vAPI.uBO !== true
     )
 ) {

@@ -176,9 +176,17 @@ vAPI.webextFlavor = {
         soup.add('mobile');
     }
 
-    if ( CSS.supports('selector(a:has(b))') ) {
+    // [PATCH uBlock-mv3] @SukkaW
+    //
+    // All modern Browsers suppoert `:has()` selector. As for Firefox users:
+    // - Firefox won't even use our fork, they all use native uBO
+    // - Even if they do this this fork, they probably are running Firefox 121+ anyway
+    //
+    // Thus, we can simply skip this check
+    //
+    // if ( CSS.supports('selector(a:has(b))') ) {
         soup.add('native_css_has');
-    }
+    // }
 
     const extensionOrigin = browser.runtime.getURL('');
 
