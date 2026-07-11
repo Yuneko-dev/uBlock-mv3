@@ -762,6 +762,14 @@ body:not([data-more*="e"]) [data-more="e"] {
 :root.desktop {
     display: flex;
     justify-content: flex-end;
+    /* [PATCH uBlock-mv3]
+       Chromium sizes the action popup to the <html> box width. Because :root
+       is a flex container and <body> is a flex item with `overflow: hidden`
+       (min-width resolves to 0), the root can collapse to the popup's minimum
+       width (~25px), clipping the panel — this shows up under MV3 / fractional
+       display scaling. Flooring the root at its content width forces Chromium
+       to measure the full width and to grow when the firewall pane is shown. */
+    min-width: max-content;
     }
 :root.desktop body {
     --popup-gap: calc(var(--font-size) * 0.875);
