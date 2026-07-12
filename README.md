@@ -53,6 +53,8 @@ Visit the [Wiki][Wiki] for documentation.
 For support, questions, or help, visit [/r/uBlockOrigin][Reddit].
 
 ## Installation
+**On Windows and macOS, Chrome aggressively blocks sideloaded extensions attempting to get webRequestBlocking permission:** sideloaded self-signed CRXs are disabled, and ExtensionInstallForcelist extensions with custom update URLs are blocked without proper enterprise management. The only way to install reliably on Windows or macOS is to locally build and load unpacked.
+
 Add `"blockddmmcjpfkbhanlgegpmjpfpfjka;https://ublock.r58playz.dev/update.xml"` to your ExtensionInstallForcelist policy.
 
 To do this on Linux:
@@ -66,7 +68,7 @@ Local build:
 4. Enable "Allow User Scripts" in the extension settings
 5. Restart Chrome
 
-CRX build (last resort):
+CRX build (last resort, only works reliably on Linux):
 1. Install the CRX
 2. Start chrome from the terminal with the command line flag `--allowlisted-extension-id=<sideloaded_uBO_id>`. You'll need to do this every time.
 3. Enable "Allow User Scripts" in the extension settings
